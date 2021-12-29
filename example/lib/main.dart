@@ -36,14 +36,42 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: const Center(
-        child: CometIndicator(
-          baseColor: Colors.pinkAccent,
-          radius: 100,
-          strokeWidth: 3,
-          indicatorRatio: 0.7,
-          duration: Duration(seconds: 2),
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CometIndicator.simple(
+            baseColor: Colors.pinkAccent,
+            radius: 100,
+            strokeWidth: 3,
+            indicatorRatio: 0.7,
+            dotRadius: 4,
+            duration: const Duration(seconds: 2),
+          ),
+          CometIndicator.custom(
+            indicatorColors: [
+              Colors.red,
+              Colors.blue,
+              Colors.yellow,
+              Colors.yellow.withOpacity(0),
+            ],
+            indicatorColorStops: const [0, 0.2, 0.7, 1.0],
+            dotColor: Colors.pinkAccent,
+            radius: 100,
+            strokeWidth: 3,
+            indicatorRatio: 0.5,
+            dotRadius: 4,
+            duration: const Duration(seconds: 2),
+          ),
+          CometIndicator.simple(
+            baseColor: Colors.pinkAccent,
+            radius: 100,
+            strokeWidth: 3,
+            indicatorRatio: 0.7,
+            showsDot: false,
+            duration: const Duration(seconds: 2),
+          ),
+        ],
       ),
     );
   }

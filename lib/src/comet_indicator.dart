@@ -6,19 +6,49 @@ import 'package:flutter/widgets.dart';
 const _2pi = $math.pi * 2;
 
 class CometIndicator extends StatefulWidget {
-  const CometIndicator({
+  CometIndicator.simple({
+    Key? key,
+    Duration duration = const Duration(seconds: 1),
+    required Color baseColor,
+    required double radius,
+    double strokeWidth = 1,
+    double indicatorRatio = 1,
+    bool showsDot = true,
+    double dotRadius = 2,
+  }) : this.custom(
+          key: key,
+          duration: duration,
+          indicatorColors: [
+            baseColor,
+            baseColor.withOpacity(0),
+          ],
+          dotColor: baseColor,
+          radius: radius,
+          strokeWidth: strokeWidth,
+          indicatorRatio: indicatorRatio,
+          showsDot: showsDot,
+          dotRadius: dotRadius,
+        );
+
+  const CometIndicator.custom({
     Key? key,
     this.duration = const Duration(seconds: 1),
-    required this.baseColor,
+    required this.indicatorColors,
+    this.indicatorColorStops = const [0.0, 1.0],
+    required this.dotColor,
     required this.radius,
     this.strokeWidth = 1,
     this.indicatorRatio = 1,
     this.showsDot = true,
     this.dotRadius = 2,
-  }) : super(key: key);
+  })  : assert(indicatorRatio >= 0 && indicatorRatio <= 1.0),
+        assert(indicatorColors.length == indicatorColorStops.length),
+        super(key: key);
 
   final Duration duration;
-  final Color baseColor;
+  final List<Color> indicatorColors;
+  final List<double> indicatorColorStops;
+  final Color dotColor;
   final double radius;
   final double strokeWidth;
   final double indicatorRatio;
@@ -45,9 +75,9 @@ class _CometIndicatorState extends State<CometIndicator>
 
   @override
   void dispose() {
-    super.dispose();
     _animationController?.dispose();
     _animationController = null;
+    super.dispose();
   }
 
   @override
@@ -63,8 +93,11 @@ class _CometIndicatorState extends State<CometIndicator>
         );
       },
       child: CustomPaint(
+        size: Size.fromRadius(widget.radius),
         painter: _CometIndicatorPainer(
-          baseColor: widget.baseColor,
+          indicatorColors: widget.indicatorColors,
+          indicatorColorStops: widget.indicatorColorStops,
+          dotColor: widget.dotColor,
           radius: widget.radius,
           strokeWidth: widget.strokeWidth,
           indicatorRatio: widget.indicatorRatio,
@@ -78,7 +111,9 @@ class _CometIndicatorState extends State<CometIndicator>
 
 class _CometIndicatorPainer extends CustomPainter {
   const _CometIndicatorPainer({
-    required this.baseColor,
+    required this.indicatorColors,
+    required this.indicatorColorStops,
+    required this.dotColor,
     required this.radius,
     required this.strokeWidth,
     required this.indicatorRatio,
@@ -86,7 +121,9 @@ class _CometIndicatorPainer extends CustomPainter {
     required this.dotRadius,
   });
 
-  final Color baseColor;
+  final List<Color> indicatorColors;
+  final List<double> indicatorColorStops;
+  final Color dotColor;
   final double radius;
   final double strokeWidth;
   final double indicatorRatio;
@@ -95,27 +132,23 @@ class _CometIndicatorPainer extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    assert(indicatorRatio <= 1.0 && indicatorRatio >= 0);
-
+    final center = Offset(radius, radius);
     final strokePaint = Paint();
     strokePaint.shader = $ui.Gradient.sweep(
-      Offset.zero,
-      [
-        baseColor.withOpacity(0),
-        baseColor,
-      ],
-      null,
+      center,
+      indicatorColors.reversed.toList(),
+      indicatorColorStops,
       TileMode.clamp,
       _2pi - _2pi * indicatorRatio,
       _2pi,
     );
     strokePaint.style = $ui.PaintingStyle.stroke;
     strokePaint.strokeWidth = strokeWidth;
-    canvas.drawCircle(Offset.zero, radius, strokePaint);
+    canvas.drawCircle(center, radius, strokePaint);
 
     final dotPaint = Paint();
-    dotPaint.color = baseColor;
-    canvas.drawCircle(Offset(radius, 0), dotRadius, dotPaint);
+    dotPaint.color = dotColor;
+    canvas.drawCircle(Offset(radius * 2, radius), dotRadius, dotPaint);
   }
 
   @override
