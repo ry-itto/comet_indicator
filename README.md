@@ -1,39 +1,45 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+An indicator ui package inspired by [this video](https://www.youtube.com/watch?v=zEqTjB-OJVI) and [CL app](https://apps.apple.com/jp/app/cl-%E3%82%B7%E3%83%BC%E3%82%A8%E3%83%AB/id1508298355).
 
 ## Features
+### Demo
+https://user-images.githubusercontent.com/30540303/147690694-2fb49ac4-ae13-4749-8c3a-dc29ea435974.mp4
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Add this package to your dependency. (pubspec.yaml)
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+### A simple usage
 
 ```dart
-const like = 'sample';
+CometIndicator.simple(
+  baseColor: Colors.pinkAccent,
+  radius: 70,
+  strokeWidth: 3,
+  indicatorRatio: 0.7,
+  dotRadius: 4,
+  duration: const Duration(seconds: 2),
+)
 ```
 
-## Additional information
+### More customizable usage
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+```dart
+CometIndicator.custom(
+  indicatorColors: [
+    Colors.red,
+    Colors.blue,
+    Colors.yellow,
+    Colors.yellow.withOpacity(0),
+  ],
+  indicatorColorStops: const [0, 0.2, 0.7, 1.0],
+  dotColor: Colors.pinkAccent,
+  radius: 70,
+  strokeWidth: 3,
+  indicatorRatio: 0.5,
+  dotRadius: 4,
+  duration: const Duration(seconds: 2),
+)
+```
