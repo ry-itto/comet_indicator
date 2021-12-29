@@ -3,8 +3,6 @@ import 'dart:ui' as $ui;
 
 import 'package:flutter/widgets.dart';
 
-const _2pi = $math.pi * 2;
-
 class CometIndicator extends StatefulWidget {
   CometIndicator.simple({
     Key? key,
@@ -69,7 +67,7 @@ class _CometIndicatorState extends State<CometIndicator>
     _animationController = AnimationController(
       vsync: this,
       lowerBound: 0,
-      upperBound: _2pi,
+      upperBound: $math.pi * 2,
     )..repeat(period: widget.duration);
   }
 
@@ -139,8 +137,8 @@ class _CometIndicatorPainer extends CustomPainter {
       indicatorColors.reversed.toList(),
       indicatorColorStops,
       TileMode.clamp,
-      _2pi - _2pi * indicatorRatio,
-      _2pi,
+      $math.pi * 2 - $math.pi * 2 * indicatorRatio,
+      $math.pi * 2,
     );
     strokePaint.style = $ui.PaintingStyle.stroke;
     strokePaint.strokeWidth = strokeWidth;
