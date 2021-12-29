@@ -55,6 +55,24 @@ class CometIndicator extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _CometIndicatorState();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '''
+    CometIndicator(
+        key: $key,
+        duration: $duration,
+        indicatorColors: $indicatorColors,
+        indicatorColorStops: $indicatorColorStops,
+        dotColor: $dotColor,
+        radius: $radius,
+        strokeWidth: $strokeWidth,
+        indicatorRatio: $indicatorRatio,
+        showsDot: $showsDot,
+        dotRadius: $dotRadius, 
+    )
+    ''';
+  }
 }
 
 class _CometIndicatorState extends State<CometIndicator>
@@ -87,7 +105,9 @@ class _CometIndicatorState extends State<CometIndicator>
       builder: (context, child) {
         return Transform.rotate(
           angle: _animationController!.value,
-          child: child,
+          child: Center(
+            child: child,
+          ),
         );
       },
       child: CustomPaint(
