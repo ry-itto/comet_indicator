@@ -83,6 +83,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 duration: const Duration(seconds: 2),
               ),
             ),
+            _TitledGridItem(
+              title: 'Custom, use icon',
+              child: CometIndicator.custom(
+                indicatorColors: [
+                  Colors.red,
+                  Colors.red.withOpacity(0),
+                ],
+                dotIcon: const Icon(Icons.star),
+                dotColor: Colors.pinkAccent,
+                radius: 70,
+                strokeWidth: 3,
+                indicatorRatio: 0.5,
+                dotRadius: 4,
+                duration: const Duration(seconds: 2),
+              ),
+            ),
           ],
         ),
       ),

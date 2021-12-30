@@ -33,6 +33,7 @@ class CometIndicator extends StatefulWidget {
     this.duration = const Duration(seconds: 1),
     required this.indicatorColors,
     this.indicatorColorStops = const [0.0, 1.0],
+    this.dotIcon,
     required this.dotColor,
     required this.radius,
     this.strokeWidth = 1,
@@ -46,6 +47,7 @@ class CometIndicator extends StatefulWidget {
   final Duration duration;
   final List<Color> indicatorColors;
   final List<double> indicatorColorStops;
+  final Icon? dotIcon;
   final Color dotColor;
   final double radius;
   final double strokeWidth;
@@ -64,6 +66,7 @@ class CometIndicator extends StatefulWidget {
         duration: $duration,
         indicatorColors: $indicatorColors,
         indicatorColorStops: $indicatorColorStops,
+        dotIcon: $dotIcon,
         dotColor: $dotColor,
         radius: $radius,
         strokeWidth: $strokeWidth,
@@ -115,6 +118,7 @@ class _CometIndicatorState extends State<CometIndicator>
         painter: _CometIndicatorPainer(
           indicatorColors: widget.indicatorColors,
           indicatorColorStops: widget.indicatorColorStops,
+          dotIcon: widget.dotIcon,
           dotColor: widget.dotColor,
           radius: widget.radius,
           strokeWidth: widget.strokeWidth,
@@ -131,6 +135,7 @@ class _CometIndicatorPainer extends CustomPainter {
   const _CometIndicatorPainer({
     required this.indicatorColors,
     required this.indicatorColorStops,
+    required this.dotIcon,
     required this.dotColor,
     required this.radius,
     required this.strokeWidth,
@@ -141,6 +146,7 @@ class _CometIndicatorPainer extends CustomPainter {
 
   final List<Color> indicatorColors;
   final List<double> indicatorColorStops;
+  final Icon? dotIcon;
   final Color dotColor;
   final double radius;
   final double strokeWidth;
@@ -164,9 +170,28 @@ class _CometIndicatorPainer extends CustomPainter {
     strokePaint.strokeWidth = strokeWidth;
     canvas.drawCircle(center, radius, strokePaint);
 
-    final dotPaint = Paint();
-    dotPaint.color = dotColor;
-    canvas.drawCircle(Offset(radius * 2, radius), dotRadius, dotPaint);
+    final dotOffset = Offset(radius * 2, radius);
+    if (dotIcon?.icon != null) {
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: String.fromCharCode(dotIcon!.icon!.codePoint),
+          style: TextStyle(
+            color: dotColor,
+            fontSize: dotIcon!.size,
+            fontFamily: dotIcon!.icon!.fontFamily,
+            package: dotIcon!.icon!.fontPackage,
+          ),
+        ),
+        textDirection: $ui.TextDirection.ltr,
+        textAlign: TextAlign.center,
+      );
+      textPainter.layout(maxWidth: dotRadius);
+      textPainter.paint(canvas, dotOffset);
+    } else {
+      final dotPaint = Paint();
+      dotPaint.color = dotColor;
+      canvas.drawCircle(dotOffset, dotRadius, dotPaint);
+    }
   }
 
   @override
